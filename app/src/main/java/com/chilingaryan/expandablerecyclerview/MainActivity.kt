@@ -36,38 +36,22 @@ class MainActivity : AppCompatActivity() {
         RetrofitClient.getApiService().getDummyJson("http://json-schema.org/example/calendar.json").enqueue(object : Callback<DummyResponse?> {
             override fun onResponse(call: Call<DummyResponse?>?, response: Response<DummyResponse?>?) {
                 response?.body()?.let { dummyResponse: DummyResponse ->
-                    val description = DummyData(DEPTH_0)
-                    description.text = dummyResponse.description
+                    dummyData.add(DummyData(DEPTH_0,"\$schema", dummyResponse.schema ))
 
-                    val required = DummyData(DEPTH_1, "required")
-
+                    val required = DummyData(DEPTH_0, "required")
                     dummyResponse.required.forEach {
-                        required.children.add(DummyData(DEPTH_2, it))
+                        required.children.add(DummyData(DEPTH_1, it))
                     }
 
-                    val properties = DummyData(DEPTH_1, "properties")
-
-                    val dtstart = DummyData(DEPTH_2, "dtstart");
-                    dtstart.children.add(DummyData(DEPTH_3, dummyResponse.properties.dtstart.description, dummyResponse.properties.dtstart.format))
-
-                    val dtend = DummyData(DEPTH_2, "dtend");
-                    dtend.children.add(DummyData(DEPTH_3, dummyResponse.properties.dtend.description, dummyResponse.properties.dtend.format))
-
-                    val summary = DummyData(DEPTH_2, "summary");
-                    summary.children.add(DummyData(DEPTH_3, dummyResponse.properties.summary.type))
-
-                    val location = DummyData(DEPTH_2, "location");
-                    location.children.add(DummyData(DEPTH_3, dummyResponse.properties.location.type))
-
+                    val properties = DummyData(DEPTH_0, "properties")
+                    val dtstart = DummyData(DEPTH_1, "dtstart");
+                    dtstart.children.add(DummyData(DEPTH_2, "format", dummyResponse.properties.dtstart.format))
+                    dtstart.children.add(DummyData(DEPTH_2, "type", dummyResponse.properties.dtstart.type))
+                    dtstart.children.add(DummyData(DEPTH_2, "description", dummyResponse.properties.dtstart.description))
                     properties.children.add(dtstart)
-                    properties.children.add(dtend)
-                    properties.children.add(summary)
-                    properties.children.add(location)
 
-                    description.children.add(required)
-                    description.children.add(properties)
-
-                    dummyData.add(description)
+                    dummyData.add(required)
+                    dummyData.add(properties)
 
                     adapter.notifyDataSetChanged()
 
