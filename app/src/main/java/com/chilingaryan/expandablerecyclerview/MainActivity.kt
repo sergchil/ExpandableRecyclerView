@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.chilingaryan.expandablerecyclerview.network.DummyResponse
-import com.chilingaryan.expandablerecyclerview.network.RetrofitClient
+import com.chilingaryan.expandablerecyclerview.network.RetrofitService
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun prepareDummyData() {
-        RetrofitClient.getApiService().getDummyJson("http://json-schema.org/example/calendar.json").enqueue(object : Callback<DummyResponse?> {
+        RetrofitService.instance.getDummyJson("http://json-schema.org/example/calendar.json").enqueue(object : Callback<DummyResponse?> {
             override fun onResponse(call: Call<DummyResponse?>?, response: Response<DummyResponse?>?) {
                 response?.body()?.let { dummyResponse: DummyResponse ->
                     dummyData.add(DummyData(DEPTH_0,"\$schema", dummyResponse.schema ))
